@@ -1,17 +1,17 @@
-# Multi-Agent Reinforcement Learning: Porównanie VDN i QMIX w BenchMARL
+# Multi-Agent Reinforcement Learning: Comparison of VDN and QMIX in BenchMARL
 
-## 📌 Opis projektu
+## 📌 Project Description
 
-Celem projektu jest dostosowanie hiperparametrów i porównanie dwóch popularnych algorytmów wieloagentowego uczenia ze wzmocnieniem — **VDN** (Value Decomposition Networks) i **QMIX** — z wykorzystaniem frameworka **BenchMARL**. Eksperymenty przeprowadzono w środowisku obejmującym **scenariusze kooperacyjne** oraz **kompetytywne**.
+The goal of this project is to tune hyperparameters and compare two popular multi-agent reinforcement learning algorithms—**VDN** (Value Decomposition Networks) and **QMIX**—using the **BenchMARL** framework. Experiments were conducted in an environment that includes both **cooperative** and **competitive** scenarios.
 
-Projekt zawiera:
-- trening agentów w różnych scenariuszach,
-- tuning hiperparametrów (learning rate, discount factor),
-- analizę wyników.
+The project includes:
+- training agents in various scenarios,
+- tuning hyperparameters (learning rate, discount factor),
+- result analysis.
 
 ---
 
-## 📦 Wykorzystane biblioteki
+## 📦 Libraries Used
 
 - `BenchMARL`
 - `NumPy`, `Pandas`
@@ -20,65 +20,65 @@ Projekt zawiera:
 
 ---
 
-## 🔬 Środowiska
+## 🔬 Environments
 
 ### 🟢 Multi-Agent Particle Environment (MPE)
-Lekka platforma 2D stworzona do testów MARL.
+A lightweight 2D platform designed for MARL testing.
 
-**Scenariusze:**
-- `Simple Spread`: agenci rozkładają się równomiernie.
-- `Simple Adversary`: kooperacja i unikanie przeciwnika.
-- `Simple Push`: scenariusz rywalizacyjny, w którym agenci konkurują o przesunięcie obiektu na określoną pozycję.
+**Scenarios:**
+- `Simple Spread`: agents spread out evenly.
+- `Simple Adversary`: cooperation and avoiding an opponent.
+- `Simple Push`: a competitive scenario where agents compete to push an object to a specified position.
 
-**Cechy:**
-- środowisko dyskretne,
-- kompatybilne z OpenAI Gym,
-- możliwość tworzenia własnych scenariuszy.
+**Features:**
+- discrete environment,
+- compatible with OpenAI Gym,
+- ability to create custom scenarios.
 
 ---
 
-## 🧠 Opis algorytmów
+## 🧠 Algorithm Description
 
 ### ✅ Value Decomposition Networks (VDN)
 
-VDN zakłada, że globalna wartość zespołu agentów \( Q_{\text{tot}} \) może być wyrażona jako suma lokalnych wartości \( Q_i \) dla każdego agenta:
+VDN assumes that the global value of a team of agents \( Q_{\text{tot}} \) can be expressed as the sum of the local values \( Q_i \) for each agent:
 
 \[
 Q_{\text{tot}}(\tau, u) = \sum_{i=1}^{n} Q_i(\tau_i, u_i)
 \]
 
-**Cechy:**
-- prosta struktura,
-- szybki trening,
-- ograniczenia przy złożonych zależnościach.
+**Features:**
+- simple structure,
+- fast training,
+- limitations with complex dependencies.
 
 ---
 
 ### ✅ QMIX
 
-QMIX rozszerza VDN przez zastosowanie **nieliniowej, monotonicznej funkcji mieszającej**:
+QMIX extends VDN by using a **non-linear, monotonic mixing function**:
 
 \[
 \frac{\partial Q_{\text{tot}}}{\partial Q_i} \geq 0
 \]
 
-**Cechy:**
-- lepsza reprezentacja złożonych zależności,
-- centralizowane trenowanie z zdecentralizowanym wykonaniem,
-- wsparcie dla dynamicznych środowisk.
+**Features:**
+- better representation of complex dependencies,
+- centralized training with decentralized execution,
+- support for dynamic environments.
 
 ---
 
-## ⚙️ Plan eksperymentów
+## ⚙️ Experiment Plan
 
-- Porównanie QMIX i VDN na zadaniach z MPE.
-- Testy kooperacyjne: `Simple Spread`.
-- Testy kompetytywne: `Simple Push`,  `Simple Adversary`.
-- Różne konfiguracje hiperparametrów.
+- Comparison of QMIX and VDN on MPE tasks.
+- Cooperative tests: `Simple Spread`.
+- Competitive tests: `Simple Push`, `Simple Adversary`.
+- Various hyperparameter configurations.
 
-## ⚗️ Eksperymenty z hiperparametrami
+## ⚗️ Hyperparameter Experiments
 
-W celu znalezienia najlepszej konfiguracji dla algorytmów VDN i QMIX, przeprowadzono serię eksperymentów z różnymi wartościami hiperparametrów. Punktem wyjścia była domyślna konfiguracja BenchMARL (przykład poniżej):
+To find the best configuration for VDN and QMIX algorithms, a series of experiments were conducted with different hyperparameter values. The starting point was the default configuration of BenchMARL (example below):
 
 default_config = {
     'sampling_device': 'cuda',
@@ -133,52 +133,52 @@ default_config = {
 
 ---
 
-## 🧩 Wpływ hiperparametrów na algorytmy MARL
+## 🧩 Impact of Hyperparameters on MARL Algorithms
 
 ### 1. `lr` (Learning Rate)
-- **Opis:** Określa szybkość aktualizacji wag modelu podczas trenowania.
-- **Wpływ:** Zbyt wysoka wartość może prowadzić do niestabilności modelu, co objawia się dużymi wahania w nagrodach. Zbyt niska wartość może spowodować bardzo wolne uczenie się i zbyt małe zmiany w polityce agenta.
+- **Description:** Determines the speed of model weight updates during training.
+- **Impact:** A value that is too high can lead to model instability, resulting in significant fluctuations in rewards. A value that is too low may result in very slow learning and minimal changes in the agent's policy.
 
 ### 2. `clip_grad_norm`
-- **Opis:** Ogranicza długość gradientu.
-- **Wpływ:** Zapobiega eksplozji gradientów, co może być szczególnie problematyczne w złożonych środowiskach. Wyłączenie tego parametru (`None`) może prowadzić do niestabilnych wyników.
+- **Description:** Limits the length of the gradient.
+- **Impact:** Prevents gradient explosion, which can be particularly problematic in complex environments. Disabling this parameter (`None`) can lead to unstable results.
 
 ### 3. `polyak_tau`
-- **Opis:** Współczynnik miękkiego aktualizowania wag targetowych w sieci neuronowej.
-- **Wpływ:** Wyższe wartości przyspieszają aktualizację wag, co może skutkować szybszą konwergencją, ale również większymi fluktuacjami w wynikach. Zbyt niskie wartości mogą spowolnić adaptację do nowych danych.
+- **Description:** Coefficient for softly updating target weights in the neural network.
+- **Impact:** Higher values speed up weight updates, which may result in faster convergence but also greater fluctuations in results. Too low values may slow down adaptation to new data.
 
 ### 4. `off_policy_memory_size`
-- **Opis:** Rozmiar bufora pamięci do przechowywania doświadczeń agenta.
-- **Wpływ:** Większy bufor umożliwia lepszą dywersyfikację danych treningowych, co może poprawić jakość polityki. Zbyt duży bufor może jednak spowodować problemy z pamięcią i czasem przetwarzania.
+- **Description:** Size of the memory buffer to store the agent's experiences.
+- **Impact:** A larger buffer allows for better diversification of training data, which can improve policy quality. However, an excessively large buffer may lead to memory and processing time issues.
 
 ### 5. `off_policy_train_batch_size`
-- **Opis:** Liczba próbek pobieranych z bufora do jednego kroku optymalizacji.
-- **Wpływ:** Mniejsze wartości mogą powodować większy szum w gradientach, co utrudnia konwergencję. Z drugiej strony, zbyt duże wartości mogą spowodować dłuższy czas treningu i zwiększone obciążenie pamięci.
+- **Description:** The number of samples drawn from the buffer for a single optimization step.
+- **Impact:** Smaller values can introduce more noise in the gradients, hindering convergence. Conversely, too large values may lead to longer training times and increased memory load.
 
 ### 6. `prefer_continuous_actions`
-- **Opis:** Wskazuje, czy model powinien obsługiwać akcje ciągłe.
-- **Wpływ:** Włączenie tej opcji wpływa na kompatybilność z różnymi środowiskami. W przypadku środowisk z dyskretnymi akcjami może to prowadzić do nieoptymalnych strategii.
+- **Description:** Indicates whether the model should support continuous actions.
+- **Impact:** Enabling this option affects compatibility with different environments. In environments with discrete actions, this may lead to suboptimal strategies.
 
 ### 7. `exploration_eps_init`
-- **Opis:** Początkowa wartość parametru eksploracji w strategii ε-greedy.
-- **Wpływ:** Im wyższa wartość, tym bardziej eksploracyjne działania na początku treningu, co może pomóc w odkrywaniu lepszych strategii. Zbyt niski parametr może prowadzić do lokalnych minimów.
+- **Description:** Initial value of the exploration parameter in the ε-greedy strategy.
+- **Impact:** The higher the value, the more exploratory actions are taken at the beginning of training, which can help in discovering better strategies. A too-low parameter can lead to local minima.
 
 ### 8. `exploration_anneal_frames`
-- **Opis:** Liczba kroków, po których wartość ε jest zmniejszana do wartości końcowej (`exploration_eps_end`).
-- **Wpływ:** Krótszy okres prowadzi do szybszego przejścia z eksploracji do eksploatacji, co może być korzystne w prostych środowiskach, ale w bardziej złożonych może prowadzić do utraty szans na odkrycie lepszych strategii.
+- **Description:** The number of frames after which ε is reduced to its final value (`exploration_eps_end`).
+- **Impact:** A shorter period leads to faster transition from exploration to exploitation, which may be beneficial in simple environments, but in more complex ones, it may result in lost opportunities for discovering better strategies.
 
 ---
 
-## 📝 Wnioski
+## 📝 Conclusions
 
-- **Stabilność algorytmów:** VDN w większości przypadków wykazuje większy rozrzut wyników (szersze przedziały wartości), podczas gdy QMIX jest bardziej stabilny, co przejawia się w węższych przedziałach wartości. Oznacza to, że QMIX może lepiej radzić sobie w bardziej złożonych scenariuszach.
+- **Algorithm Stability:** VDN generally shows greater result variability (wider value ranges), while QMIX appears to be more stable, evident in narrower value ranges. This indicates that QMIX may perform better in more complex scenarios.
 
-- **Czas treningu:** Średni czas potrzebny na uczenie algorytmu QMIX był o 30% większy niż w przypadku VDN. Oznacza to, że QMIX może wymagać większych zasobów obliczeniowych, co warto uwzględnić przy wyborze algorytmu.
+- **Training Time:** The average training time for the QMIX algorithm was about 30% longer than for VDN. This suggests that QMIX may require more computational resources, which is worth considering when selecting the algorithm.
 
-- **Wrażliwość na hiperparametry:** Oba algorytmy wykazały znaczną wrażliwość na wartość współczynnika uczenia oraz rozmiar partii treningowej. Odpowiednie dostrojenie tych parametrów jest kluczowe dla osiągnięcia wysokiej jakości wyników.
+- **Sensitivity to Hyperparameters:** Both algorithms showed significant sensitivity to the learning rate and batch size. Proper tuning of these parameters is crucial for achieving high-quality results.
 
-- **Eksploracja:** Zwiększenie zakresu eksploracji przyczyniło się do lepszego odkrywania strategii, ale jednocześnie wprowadzało większą zmienność wyników. Sugeruje to, że istnieje optymalny poziom eksploracji, który powinien być ustalany w zależności od specyfiki zadania.
+- **Exploration:** Increasing the exploration range contributed to better strategy discovery but also introduced greater result variability. This suggests that there is an optimal level of exploration that should be determined depending on the task specifics.
 
-- **Optymalizacja architektury:** W przeprowadzonych eksperymentach skupiono się na optymalizacji hiperparametrów, nie ingerując w rozmiary architektury sieci neuronowych. To podejście pozwala na maksymalne wykorzystanie potencjału modelu, co jest kluczowe dla efektywności przy niższych kosztach obliczeniowych. Mniejsze architektury zapewniają szybsze trenowanie oraz mniejsze zużycie zasobów.
+- **Architecture Optimization:** The experiments focused on hyperparameter optimization without interfering with the neural network architecture sizes. This approach allows for maximizing the potential of the model, which is critical for efficiency at lower computational costs. Smaller architectures also lead to faster training and reduced resource consumption.
 
 
