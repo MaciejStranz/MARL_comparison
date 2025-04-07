@@ -41,11 +41,13 @@ A lightweight 2D platform designed for MARL testing.
 
 ### ✅ Value Decomposition Networks (VDN)
 
-VDN assumes that the global value of a team of agents \( Q_{\text{tot}} \) can be expressed as the sum of the local values \( Q_i \) for each agent:
+VDN assumes that the global value of a team of agents $\( Q_{\text{tot}} \)$ can be expressed as the sum of the local values $\( Q_i \)$ for each agent:
 
+$$
 \[
 Q_{\text{tot}}(\tau, u) = \sum_{i=1}^{n} Q_i(\tau_i, u_i)
 \]
+$$
 
 **Features:**
 - simple structure,
@@ -58,9 +60,11 @@ Q_{\text{tot}}(\tau, u) = \sum_{i=1}^{n} Q_i(\tau_i, u_i)
 
 QMIX extends VDN by using a **non-linear, monotonic mixing function**:
 
+$$
 \[
 \frac{\partial Q_{\text{tot}}}{\partial Q_i} \geq 0
 \]
+$$
 
 **Features:**
 - better representation of complex dependencies,
@@ -80,6 +84,7 @@ QMIX extends VDN by using a **non-linear, monotonic mixing function**:
 
 To find the best configuration for VDN and QMIX algorithms, a series of experiments were conducted with different hyperparameter values. The starting point was the default configuration of BenchMARL (example below):
 
+```python
 default_config = {
     'sampling_device': 'cuda',
     'train_device': 'cuda',
@@ -129,7 +134,7 @@ default_config = {
     'max_n_iters': 5000,
     'loggers': [],
 }
-
+```
 
 ---
 
